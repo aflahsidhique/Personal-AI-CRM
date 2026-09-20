@@ -67,11 +67,12 @@ services:
       - key: VITE_API_URL
         value: /api
     routes:
-      # NOTE: verify this hostname after the first deploy. Render appends a
-      # random suffix if the name `ai-crm-api` is already taken account-wide.
+      # This must match the API service's actual hostname. Render appended the
+      # `-e9lf` suffix because the bare name was already taken; if the service is
+      # ever recreated under a new name, update this line to match.
       - type: rewrite
         source: /api/*
-        destination: https://ai-crm-api.onrender.com/api/*
+        destination: https://ai-crm-api-e9lf.onrender.com/api/*
       # SPA fallback — must stay last so it does not swallow /api
       - type: rewrite
         source: /*
