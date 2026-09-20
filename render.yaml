@@ -1,0 +1,82 @@
+# Render Blueprint — AI Personal CRM
+# Docs: https://render.com/docs/blueprint-spec
+#
+# Creates two services:
+#   1. ai-crm-api   — Express + Prisma API (Node), SQLite on a persistent disk
+#   2. ai-crm-web   — Vite/React SPA served as a static site, proxying /api to the API
+#
+# Deploy: push this repo to GitHub/GitLab, then Render Dashboard → New → Blueprint.
+# You will be prompted for the two secrets marked `sync: false`.
+
+services:
+  # ---------------------------------------------------------------------------
+  # API
+  # ---------------------------------------------------------------------------
+  - type: web
+    name: ai-crm-api
+    runtime: node
+    plan: starter # a persistent disk requires Starter or higher — see notes below
+    region: oregon
+    rootDir: server
+    healthCheckPath: /api/health
+    # Only rebuild the API when server code changes
+    buildFilter:
+      paths:
+        - server/**
+    # devDependencies are needed at build time (typescript, prisma CLI)
+    buildCommand: npm ci --include=dev && npx prisma generate && npm run build
+    # Migrations run at start, not build: the disk is only mounted at runtime
+    startCommand: npx prisma migrate deploy && npm run start
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      # Absolute path on the mounted disk. lib/prisma.ts strips the file: prefix.
+      - key: DATABASE_URL
+        value: file:/var/data/file.db
+      - key: OPENROUTER_API_KEY
+        sync: false # prompted on first deploy, stored encrypted
+      - key: OPENROUTER_MODEL
+        value: openai/gpt-4o-mini
+      - key: SARVAM_API_KEY
+        sync: false
+      - key: SARVAM_STT_MODEL
+        value: saaras:v3
+    # SQLite lives here so it survives deploys and restarts
+    disk:
+      name: crm-data
+      mountPath: /var/data
+      sizeGB: 1
+
+  # ---------------------------------------------------------------------------
+  # Frontend
+  # ---------------------------------------------------------------------------
+  - type: web
+    name: ai-crm-web
+    runtime: static
+    rootDir: app
+    buildFilter:
+      paths:
+        - app/**
+    buildCommand: npm ci && npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      # Same-origin: the rewrite below proxies this to the API service,
+      # so there is no CORS dependency and no rebuild if the API URL changes.
+      - key: VITE_API_URL
+        value: /api
+    routes:
+      # NOTE: verify this hostname after the first deploy. Render appends a
+      # random suffix if the name `ai-crm-api` is already taken account-wide.
+      - type: rewrite
+        source: /api/*
+        destination: https://ai-crm-api.onrender.com/api/*
+      # SPA fallback — must stay last so it does not swallow /api
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    headers:
+      - path: /assets/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable

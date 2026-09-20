@@ -1,0 +1,313 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: "Space Grotesk", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display: "Archivo Black", "Space Grotesk", ui-sans-serif, sans-serif;
+
+  --breakpoint-xs: 26rem;
+
+  --color-ink: var(--nb-ink);
+  --color-paper: var(--nb-paper);
+  --color-surface: var(--nb-surface);
+  --color-sunken: var(--nb-sunken);
+  --color-muted: var(--nb-muted);
+
+  /* accents are always light fills, so text on them stays near-black in both themes */
+  --color-onaccent: #0b0b0d;
+  --color-acid: #c9f73c;
+  --color-lav: #b3a1ff;
+  --color-coral: #ff6d4d;
+  --color-aqua: #5fcdff;
+  --color-bubble: #ff9ad5;
+  --color-sun: #ffd233;
+  --color-mint: #62efb4;
+  --color-grape: #7c5cff;
+}
+
+:root {
+  --nb-ink: #0b0b0d;
+  --nb-paper: #fdf6e3;
+  --nb-surface: #ffffff;
+  --nb-sunken: #f2ecd9;
+  --nb-muted: #5f5c55;
+  --nb-dot: rgba(11, 11, 13, 0.13);
+
+  --nb-bw: 2px;
+  --nb-off: 3px;
+  --nb-off-lg: 5px;
+  --nb-r: 12px;
+
+  color-scheme: light;
+}
+
+@media (min-width: 40rem) {
+  :root {
+    --nb-bw: 3px;
+    --nb-off: 5px;
+    --nb-off-lg: 8px;
+    --nb-r: 14px;
+  }
+}
+
+:root.dark {
+  --nb-ink: #f7f3e6;
+  --nb-paper: #131316;
+  --nb-surface: #1e1e24;
+  --nb-sunken: #17171b;
+  --nb-muted: #a5a2ab;
+  --nb-dot: rgba(247, 243, 230, 0.1);
+
+  color-scheme: dark;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100dvh;
+    overflow-x: hidden;
+    background-color: var(--nb-paper);
+    background-image: radial-gradient(var(--nb-dot) 1px, transparent 1px);
+    background-size: 22px 22px;
+    color: var(--nb-ink);
+    font-family: var(--font-sans);
+    font-weight: 500;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  input,
+  textarea,
+  select,
+  button {
+    font: inherit;
+    color: inherit;
+  }
+
+  ::selection {
+    background: var(--color-acid);
+    color: #0b0b0d;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--nb-ink);
+    outline-offset: 2px;
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--nb-ink) transparent;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--nb-ink);
+    border: 2px solid var(--nb-paper);
+    border-radius: 999px;
+  }
+}
+
+@layer components {
+  /* --- primitives ------------------------------------------------------ */
+  .nb-b {
+    border: var(--nb-bw) solid var(--nb-ink);
+  }
+
+  .nb-sh {
+    box-shadow: var(--nb-off) var(--nb-off) 0 0 var(--nb-ink);
+  }
+
+  .nb-sh-lg {
+    box-shadow: var(--nb-off-lg) var(--nb-off-lg) 0 0 var(--nb-ink);
+  }
+
+  .nb-card {
+    background-color: var(--nb-surface);
+    border: var(--nb-bw) solid var(--nb-ink);
+    border-radius: var(--nb-r);
+    box-shadow: var(--nb-off) var(--nb-off) 0 0 var(--nb-ink);
+  }
+
+  .nb-card-flat {
+    background-color: var(--nb-surface);
+    border: var(--nb-bw) solid var(--nb-ink);
+    border-radius: var(--nb-r);
+  }
+
+  /* hover lift, for cards that are links */
+  .nb-lift {
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+  }
+
+  .nb-lift:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: calc(var(--nb-off) + 2px) calc(var(--nb-off) + 2px) 0 0 var(--nb-ink);
+  }
+
+  .nb-lift:active {
+    transform: translate(1px, 1px);
+    box-shadow: calc(var(--nb-off) - 1px) calc(var(--nb-off) - 1px) 0 0 var(--nb-ink);
+  }
+
+  /* --- buttons --------------------------------------------------------- */
+  .nb-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    white-space: nowrap;
+    padding: 0.55rem 0.9rem;
+    border: var(--nb-bw) solid var(--nb-ink);
+    border-radius: calc(var(--nb-r) - 4px);
+    background-color: var(--nb-surface);
+    box-shadow: var(--nb-off) var(--nb-off) 0 0 var(--nb-ink);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    cursor: pointer;
+    transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.15s ease;
+  }
+
+  .nb-btn:hover:not(:disabled) {
+    transform: translate(-1px, -1px);
+    box-shadow: calc(var(--nb-off) + 1px) calc(var(--nb-off) + 1px) 0 0 var(--nb-ink);
+  }
+
+  .nb-btn:active:not(:disabled) {
+    transform: translate(var(--nb-off), var(--nb-off));
+    box-shadow: 0 0 0 0 var(--nb-ink);
+  }
+
+  .nb-btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  .nb-btn-icon {
+    padding: 0.5rem;
+    border-radius: calc(var(--nb-r) - 4px);
+  }
+
+  /* --- form controls ---------------------------------------------------- */
+  .nb-input {
+    width: 100%;
+    padding: 0.55rem 0.75rem;
+    border: var(--nb-bw) solid var(--nb-ink);
+    border-radius: calc(var(--nb-r) - 4px);
+    background-color: var(--nb-surface);
+    font-size: 0.875rem;
+    font-weight: 500;
+    outline: none;
+    transition: box-shadow 0.1s ease;
+  }
+
+  .nb-input::placeholder {
+    color: var(--nb-muted);
+    font-weight: 500;
+  }
+
+  .nb-input:focus {
+    box-shadow: var(--nb-off) var(--nb-off) 0 0 var(--nb-ink);
+  }
+
+  .nb-select {
+    appearance: none;
+    padding-right: 2rem;
+    cursor: pointer;
+  }
+
+  /* --- text ------------------------------------------------------------- */
+  .nb-display {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    line-height: 1.02;
+    letter-spacing: -0.01em;
+  }
+
+  .nb-label {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+  }
+
+  .nb-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.1rem 0.5rem;
+    border: var(--nb-bw) solid var(--nb-ink);
+    border-radius: 999px;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    line-height: 1.5;
+  }
+
+  /* --- helpers ---------------------------------------------------------- */
+  .nb-rail {
+    display: flex;
+    gap: 0.75rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .nb-rail::-webkit-scrollbar {
+    display: none;
+  }
+
+  .nb-rail > * {
+    scroll-snap-align: start;
+  }
+
+  /* leaves room for the fixed mobile bottom nav + iOS home indicator */
+  .nb-main-pad {
+    padding-bottom: calc(5.5rem + env(safe-area-inset-bottom));
+  }
+
+  @media (min-width: 48rem) {
+    .nb-main-pad {
+      padding-bottom: 2.5rem;
+    }
+  }
+
+  .nb-hatch {
+    background-image: repeating-linear-gradient(
+      45deg,
+      var(--nb-ink) 0 1px,
+      transparent 1px 7px
+    );
+    opacity: 0.12;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nb-lift,
+  .nb-btn {
+    transition: none;
+  }
+
+  .nb-lift:hover,
+  .nb-btn:hover:not(:disabled) {
+    transform: none;
+  }
+}

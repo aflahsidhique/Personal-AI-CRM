@@ -1,0 +1,74 @@
+generator client {
+   provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Contact {
+  id          String   @id @default(cuid())
+  name        String
+  phone       String   @default("")
+  email       String   @default("")
+  company     String   @default("")
+  position    String   @default("")
+  tags        String   @default("") // comma-separated: Investor,Client,...
+  location    String   @default("")
+  birthday    DateTime?
+  linkedin    String?
+  twitter     String?
+  instagram   String?
+  aiSummary   String   @default("")
+  lastInteraction DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  notes        Note[]
+  timeline     TimelineEvent[]
+  tasks        Task[]
+  meetingNotes MeetingNote[]
+}
+
+model Note {
+  id        String   @id @default(cuid())
+  contactId String
+  text      String
+  createdAt DateTime @default(now())
+
+  contact Contact @relation(fields: [contactId], references: [id], onDelete: Cascade)
+}
+
+model TimelineEvent {
+  id        String   @id @default(cuid())
+  contactId String
+  type      String // call | meeting | whatsapp | email | note | reminder | voice
+  date      DateTime @default(now())
+  summary   String
+
+  contact Contact @relation(fields: [contactId], references: [id], onDelete: Cascade)
+}
+
+model Task {
+  id        String   @id @default(cuid())
+  title     String
+  contactId String?
+  status    String   @default("today") // today | upcoming | done
+  dueDate   DateTime @default(now())
+  source    String   @default("manual") // manual | ai
+  createdAt DateTime @default(now())
+
+  contact Contact? @relation(fields: [contactId], references: [id], onDelete: SetNull)
+}
+
+model MeetingNote {
+  id             String   @id @default(cuid())
+  contactId      String
+  rawTranscript  String
+  summary        String
+  actionItems    String // JSON-encoded string[]
+  date           DateTime @default(now())
+
+  contact Contact @relation(fields: [contactId], references: [id], onDelete: Cascade)
+}
