@@ -15,7 +15,7 @@ services:
   - type: web
     name: ai-crm-api
     runtime: node
-    plan: starter # a persistent disk requires Starter or higher — see notes below
+    plan: free # a persistent disk requires Starter or higher — see notes below
     region: oregon
     rootDir: server
     healthCheckPath: /api/health
@@ -41,11 +41,7 @@ services:
         sync: false
       - key: SARVAM_STT_MODEL
         value: saaras:v3
-    # SQLite lives here so it survives deploys and restarts
-    disk:
-      name: crm-data
-      mountPath: /var/data
-      sizeGB: 1
+    
 
   # ---------------------------------------------------------------------------
   # Frontend
