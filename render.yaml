@@ -41,7 +41,11 @@ services:
         sync: false
       - key: SARVAM_STT_MODEL
         value: saaras:v3
-    
+    # SQLite lives here so it survives deploys and restarts
+    disk:
+      name: crm-data
+      mountPath: /var/data
+      sizeGB: 1
 
   # ---------------------------------------------------------------------------
   # Frontend
