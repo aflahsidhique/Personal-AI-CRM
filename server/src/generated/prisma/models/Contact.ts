@@ -1927,6 +1927,7 @@ export type ContactCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * The data used to create many Contacts.
    */
   data: Prisma.ContactCreateManyInput | Prisma.ContactCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1945,6 +1946,7 @@ export type ContactCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensi
    * The data used to create many Contacts.
    */
   data: Prisma.ContactCreateManyInput | Prisma.ContactCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**

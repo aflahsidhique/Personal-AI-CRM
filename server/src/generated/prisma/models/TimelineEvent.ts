@@ -380,6 +380,7 @@ export type TimelineEventCreateOrConnectWithoutContactInput = {
 
 export type TimelineEventCreateManyContactInputEnvelope = {
   data: Prisma.TimelineEventCreateManyContactInput | Prisma.TimelineEventCreateManyContactInput[]
+  skipDuplicates?: boolean
 }
 
 export type TimelineEventUpsertWithWhereUniqueWithoutContactInput = {
@@ -1159,6 +1160,7 @@ export type TimelineEventCreateManyArgs<ExtArgs extends runtime.Types.Extensions
    * The data used to create many TimelineEvents.
    */
   data: Prisma.TimelineEventCreateManyInput | Prisma.TimelineEventCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1177,6 +1179,7 @@ export type TimelineEventCreateManyAndReturnArgs<ExtArgs extends runtime.Types.E
    * The data used to create many TimelineEvents.
    */
   data: Prisma.TimelineEventCreateManyInput | Prisma.TimelineEventCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

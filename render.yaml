@@ -2,11 +2,12 @@
 # Docs: https://render.com/docs/blueprint-spec
 #
 # Creates two services:
-#   1. ai-crm-api   — Express + Prisma API (Node), SQLite on a persistent disk
+#   1. ai-crm-api   — Express + Prisma API (Node), backed by an external Neon Postgres
 #   2. ai-crm-web   — Vite/React SPA served as a static site, proxying /api to the API
 #
 # Deploy: push this repo to GitHub/GitLab, then Render Dashboard → New → Blueprint.
-# You will be prompted for the two secrets marked `sync: false`.
+# You will be prompted for the three secrets marked `sync: false` — including
+# DATABASE_URL, which is kept out of this file because it contains a password.
 
 services:
   # ---------------------------------------------------------------------------
@@ -15,7 +16,7 @@ services:
   - type: web
     name: ai-crm-api
     runtime: node
-    plan: free # a persistent disk requires Starter or higher — see notes below
+    plan: free # no disk needed — state lives in Neon Postgres
     region: oregon
     rootDir: server
     healthCheckPath: /api/health
@@ -25,14 +26,18 @@ services:
         - server/**
     # devDependencies are needed at build time (typescript, prisma CLI)
     buildCommand: npm ci --include=dev && npx prisma generate && npm run build
-    # Migrations run at start, not build: the disk is only mounted at runtime
+    # Applies any pending migrations, then boots. Safe to re-run: it is a no-op
+    # when the database is already up to date.
     startCommand: npx prisma migrate deploy && npm run start
     envVars:
       - key: NODE_VERSION
         value: "22"
-      # Absolute path on the mounted disk. lib/prisma.ts strips the file: prefix.
+      # Neon pooled connection string. Kept as a secret — it contains a password,
+      # so paste it into the Render dashboard rather than committing it here.
+      # Use the -pooler host: Render free instances open more connections than
+      # a direct Neon endpoint comfortably allows.
       - key: DATABASE_URL
-        value: file:/var/data/file.db
+        sync: false
       - key: OPENROUTER_API_KEY
         sync: false # prompted on first deploy, stored encrypted
       - key: OPENROUTER_MODEL
@@ -41,11 +46,6 @@ services:
         sync: false
       - key: SARVAM_STT_MODEL
         value: saaras:v3
-    # SQLite lives here so it survives deploys and restarts
-    disk:
-      name: crm-data
-      mountPath: /var/data
-      sizeGB: 1
 
   # ---------------------------------------------------------------------------
   # Frontend

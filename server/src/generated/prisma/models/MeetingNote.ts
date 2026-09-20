@@ -404,6 +404,7 @@ export type MeetingNoteCreateOrConnectWithoutContactInput = {
 
 export type MeetingNoteCreateManyContactInputEnvelope = {
   data: Prisma.MeetingNoteCreateManyContactInput | Prisma.MeetingNoteCreateManyContactInput[]
+  skipDuplicates?: boolean
 }
 
 export type MeetingNoteUpsertWithWhereUniqueWithoutContactInput = {
@@ -1194,6 +1195,7 @@ export type MeetingNoteCreateManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * The data used to create many MeetingNotes.
    */
   data: Prisma.MeetingNoteCreateManyInput | Prisma.MeetingNoteCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1212,6 +1214,7 @@ export type MeetingNoteCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Ext
    * The data used to create many MeetingNotes.
    */
   data: Prisma.MeetingNoteCreateManyInput | Prisma.MeetingNoteCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */
