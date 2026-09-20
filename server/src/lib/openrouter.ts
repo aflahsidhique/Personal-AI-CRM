@@ -28,6 +28,10 @@ interface ChatOptions {
 export async function chatComplete({ system, user, json, temperature = 0.4 }: ChatOptions): Promise<string> {
   const key = requireApiKey();
   const model = process.env.OPENROUTER_MODEL || 'openai/gpt-4o-mini';
+  // Without an explicit cap, OpenRouter reserves the model's full context window
+  // and rejects the call with a 402 unless the account can afford all of it.
+  // Every prompt here expects a short answer, so cap it.
+  const maxTokens = Number(process.env.OPENROUTER_MAX_TOKENS) || 800;
 
   const res = await fetch(OPENROUTER_URL, {
     method: 'POST',
@@ -40,6 +44,7 @@ export async function chatComplete({ system, user, json, temperature = 0.4 }: Ch
     body: JSON.stringify({
       model,
       temperature,
+      max_tokens: maxTokens,
       messages: [
         { role: 'system', content: system },
         { role: 'user', content: user },
