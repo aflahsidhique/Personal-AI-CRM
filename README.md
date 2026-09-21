@@ -2,7 +2,7 @@
 
 > A relationship memory layer for your network — contacts, timelines, meeting transcription, and AI that turns it all into things you should actually do today.
 
-**[🚀 Live Demo](https://ai-crm-web-tb8l.onrender.com/)** · Neo-brutalist UI · Fully responsive · Voice-to-text in 23 languages
+**[🚀 Live Demo](https://ai-crm-web-tb8l.onrender.com/)** · **[▶️ Watch the Demo Video](https://www.youtube.com/watch?v=5qAPrdBKQMM)** · Neo-brutalist UI · Fully responsive · Voice-to-text in 23 languages
 
 ![Dashboard](docs/screenshots/01-dashboard.png)
 
@@ -94,9 +94,11 @@ Below `md`, the sidebar becomes a bottom tab bar and the task board turns into s
 
 ### Demo / Pitch Video
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/5qAPrdBKQMM?si=Sl3uywrn2yrhJ49N&amp;controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+[![Watch the AI Personal CRM demo](https://img.youtube.com/vi/5qAPrdBKQMM/maxresdefault.jpg)](https://www.youtube.com/watch?v=5qAPrdBKQMM)
 
-The recommended demo flow is:
+▶️ **[Watch the demo on YouTube](https://www.youtube.com/watch?v=5qAPrdBKQMM)**
+
+To walk through the app yourself, the recommended flow is:
 
 1. Create a contact and add relationship notes.
 2. Generate an AI relationship summary.
