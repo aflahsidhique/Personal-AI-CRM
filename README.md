@@ -94,9 +94,7 @@ Below `md`, the sidebar becomes a bottom tab bar and the task board turns into s
 
 ### Demo / Pitch Video
 
-<!-- Paste the video link or embed here once generated. -->
-
-_Coming soon._
+<iframe width="560" height="315" src="https://www.youtube.com/embed/5qAPrdBKQMM?si=Sl3uywrn2yrhJ49N&amp;controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 The recommended demo flow is:
 
